@@ -1,0 +1,49 @@
+{{outlet}}
+
+<table class="ui celled definition table">
+  <thead>
+  <tr>
+    <th></th>
+    <th># Parts</th>
+    <th>Voices</th>
+    <th>Composer</th>
+    <th>Book</th>
+    <th>Tags</th>
+    <th>Languages</th>
+  </tr>
+  </thead>
+  {{#each model as |song|}}
+    <tr>
+      <td>{{song.title}}</td>
+      <td>{{song.parts_no}}</td>
+      <td>{{song.voices}}</td>
+      <td>{{song.composer}}</td>
+      <td>{{song.book.title}}
+        {{#if song.book.editor}}
+          <span class="book editor">{{song.book.editor}}</span>
+        {{/if}}
+        {{#if song.book.year}}
+          <span class="book year">{{song.book.year}}</span>
+        {{/if}}
+      </td>
+      <td>
+        <ul class="csv">
+        {{#each song.tags as |tag|}}
+          {{#if (eq tag.category "subject")}}
+            <li>{{tag.title}}</li>
+          {{/if}}
+        {{/each}}
+        </ul>
+      </td>
+      <td>
+        <ul class="csv">
+        {{#each song.tags as |tag|}}
+          {{#if (eq tag.category "language")}}
+            <li>{{tag.title}}</li>
+          {{/if}}
+        {{/each}}
+        </ul>
+      </td>
+    </tr>
+  {{/each}}
+</table>

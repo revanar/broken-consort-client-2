@@ -1,0 +1,6 @@
+{
+  "name": "broken-consort-client-2",
+  "dependencies": {
+    "semantic-ui": "^2.2.13"
+  }
+}

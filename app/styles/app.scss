@@ -1,0 +1,33 @@
+//styles for displaying book editor and year on songs page
+.book {
+  &.editor {
+    font-style: italic;
+    &:before {
+      content: "/ edited by ";
+    }
+  }
+  &.year {
+    &:before {
+      content: "[";
+    }
+    &:after {
+      content: "]";
+    }
+  }
+}
+
+//styles for displaying csv list
+.csv {
+  padding: 0;
+  display: inline;
+  list-style: none;
+  li {
+    display: inline;
+    &:after {
+      content: ", ";
+    }
+    &:last-of-type:after{
+      content: "";
+    }
+  }
+}
