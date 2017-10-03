@@ -13,23 +13,23 @@
   </thead>
   {{#each sortedModel as |song|}}
     <tr>
-      <td>{{song.title}}</td>
-      <td>{{song.parts_no}}</td>
-      <td>{{song.voices}}</td>
-      <td>{{song.composer}}</td>
-      <td>{{song.book.title}}
+      <td>{{filter-link filter song.title}}</td>
+      <td>{{filter-link filter song.parts_no}}</td>
+      <td>{{filter-link filter song.voices}}</td>
+      <td>{{filter-link filter song.composer}}</td>
+      <td>{{filter-link filter song.book.title}}
         {{#if song.book.editor}}
-          <span class="book editor">{{song.book.editor}}</span>
+          <span class="book editor">{{filter-link filter song.book.editor}}</span>
         {{/if}}
         {{#if song.book.year}}
-          <span class="book year">{{song.book.year}}</span>
+          <span class="book year">{{filter-link filter song.book.year}}</span>
         {{/if}}
       </td>
       <td>
         <ul class="csv">
         {{#each song.tags as |tag|}}
           {{#if (eq tag.category "subject")}}
-            <li>{{tag.title}}</li>
+            <li>{{filter-link filter tag.title}}</li>
           {{/if}}
         {{/each}}
         </ul>
@@ -38,7 +38,7 @@
         <ul class="csv">
         {{#each song.tags as |tag|}}
           {{#if (eq tag.category "language")}}
-            <li>{{tag.title}}</li>
+            <li>{{filter-link filter tag.title}}</li>
           {{/if}}
         {{/each}}
         </ul>
