@@ -1,18 +1,17 @@
-{{outlet}}
-
-<table class="ui celled definition table">
+<button {{action "updateParams" testFilter}}>Test</button>
+<table class="ui celled table">
   <thead>
   <tr>
-    <th></th>
-    <th># Parts</th>
-    <th>Voices</th>
-    <th>Composer</th>
-    <th>Book</th>
+    <th>{{#sort-link sort "title"}}Title{{/sort-link}}</th>
+    <th>{{#sort-link sort "parts_no"}}# Parts{{/sort-link}}</th>
+    <th>{{#sort-link sort "voices"}}Voices{{/sort-link}}</th>
+    <th>{{#sort-link sort "composer"}}Composer{{/sort-link}}</th>
+    <th>{{#sort-link sort "book.title"}}Book{{/sort-link}}</th>
     <th>Tags</th>
     <th>Languages</th>
   </tr>
   </thead>
-  {{#each model as |song|}}
+  {{#each sortedModel as |song|}}
     <tr>
       <td>{{song.title}}</td>
       <td>{{song.parts_no}}</td>
