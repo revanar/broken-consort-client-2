@@ -1,0 +1,12 @@
+{{#if (eq param field)}}
+  {{#link-to (query-params sort=(concat field ":desc"))}}
+    {{yield}}<i class="caret down icon"></i>
+  {{/link-to}}
+{{else}}
+  {{#link-to (query-params sort=field)}}
+    {{yield}}
+    {{#if (eq param (concat field ":desc"))}}
+      <i class="caret up icon"></i>
+    {{/if}}
+  {{/link-to}}
+{{/if}}
