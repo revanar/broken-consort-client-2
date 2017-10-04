@@ -1,4 +1,8 @@
-<button {{action "updateParams" testFilter}}>Test</button>
+{{#ui-search source=searchPool onSelect=(action "applyFilter") }}
+  <input class="prompt" type="text" placeholder="search songs">
+  <div class="results"></div>
+{{/ui-search}}
+
 <table class="ui celled table">
   <thead>
   <tr>
@@ -28,8 +32,8 @@
       <td>
         <ul class="csv">
         {{#each song.tags as |tag|}}
-          {{#if (eq tag.category "subject")}}
-            <li>{{filter-link filter "subject" tag.title}}</li>
+          {{#if (eq tag.category "tag")}}
+            <li>{{filter-link filter "tag" tag.title}}</li>
           {{/if}}
         {{/each}}
         </ul>

@@ -2,21 +2,23 @@ import Ember from 'ember';
 
 const FilterLinkComponent = Ember.Component.extend({
   tagName: '',
-  isFiltered: Ember.computed('{param,field}', function(){
-    return this.get('field') in this.get('param');
-  }),
-  toggleFilter: Ember.computed('{param,field,data,isFiltered}', function(){
-    const beep = this.get('param');
+  isFiltered: false,
+  toggleFilter: {},
+
+  didReceiveAttrs: function () {
+    this._super(...arguments);
+    let newParams = Array.isArray(this.get('param')) ? {} : this.get('param');
     const field = this.get('field');
     const data = this.get('data');
-    if (this.get('isFiltered')){
-      let result = delete beep[field];
-      return result;
+    if (this.get('field') in this.get('param')) {
+      this.set('isFiltered', true);
+      delete newParams[field];
+
     } else {
-      beep[field] = data;
-      return beep;
+      newParams[field] = data;
     }
-  })
+    this.set('toggleFilter', newParams);
+  }
 });
 
 FilterLinkComponent.reopenClass({

@@ -6,7 +6,63 @@ export default Ember.Controller.extend({
   sort: 'title',
   filter: [],
 
-  testFilter: {filter:{'title':'Lachrimae Antiquae', 'book.title':'Lachrimae'}},
+  //creates an array of objects representing each unique searchable value, to be used by the ui-search component
+  searchPool: Ember.computed('model', function(){
+    let pool = new Set();
+    const model = this.get('model');
+    const labels = {
+      title: "Song Title",
+      parts_no: "Number of Parts",
+      voices: "Voices",
+      composer: "Composer",
+      "book.title": "Book Title",
+      "book.editor": "Book Editor",
+      "book.year": "Book Publication Year",
+      languages: "Language",
+      tags: "Tag"
+    };
+    //iterate through songs, books, and tags and pull unique values
+    model.forEach(function(item){
+      const songs = item.data;
+      const books = item.get('book.data');
+      const tags = item.get('tags');
+      for (const key in songs){
+        if (!(!songs[key])){
+          pool.add(`${key}::${songs[key]}`);
+        }
+      }
+      for (const key in books){
+        if (!(!books[key])){
+          pool.add(`book.${key}::${books[key]}`)
+        }
+      }
+      tags.forEach(function(tag){
+        if (!(!tag.get('title'))){
+          pool.add(`${tag.get('category')}s::${tag.get('title')}`)
+        }
+      });
+    });
+    //convert set into object
+    let output = [];
+    pool.forEach(function(item){
+      const itemArray = item.split("::");
+      const title = itemArray[1];
+      const description = itemArray[0];
+      output.push({title:title, description:labels[description], field:description});
+    });
+    //sort output array by title
+    function compare(a,b){
+      if (a.title < b.title){
+        return -1;
+      }
+      if (a.title > b.title){
+        return 1;
+      }
+      return 0;
+    }
+    output.sort(compare);
+    return output;
+  }),
 
   //filter model based on the value of the filter parameter
   filteredModel: Ember.computed('{model,filter}', function(){
@@ -40,11 +96,18 @@ export default Ember.Controller.extend({
   //not currently being used.
   actions: {
     updateParams(obj){
+      console.log(obj);
       for (const key in obj){
         if (!obj.hasOwnProperty(key)) {continue;}
         this.set(key, obj[key]);
         this.notifyPropertyChange(key);
       }
+    },
+    applyFilter(obj){
+      console.log(obj);
+      let output = {filter: {}};
+      output.filter[obj.field] = obj.title;
+      this.send('updateParams', output);
     }
   }
 
