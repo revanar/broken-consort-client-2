@@ -6,38 +6,40 @@ export default Ember.Controller.extend({
   sort: 'title',
   filter: [],
 
+  fieldLabels: {
+    title: "Song Title",
+    parts_no: "Number of Parts",
+    voices: "Voices",
+    composer: "Composer",
+    "book.title": "Book Title",
+    "book.editor": "Book Editor",
+    "book.year": "Book Publication Year",
+    languages: "Language",
+    tags: "Tag"
+  },
+
   //creates an array of objects representing each unique searchable value, to be used by the ui-search component
-  searchPool: Ember.computed('model', function(){
+  searchPool: Ember.computed('{model,fieldLabels}', function(){
     let pool = new Set();
     const model = this.get('model');
-    const labels = {
-      title: "Song Title",
-      parts_no: "Number of Parts",
-      voices: "Voices",
-      composer: "Composer",
-      "book.title": "Book Title",
-      "book.editor": "Book Editor",
-      "book.year": "Book Publication Year",
-      languages: "Language",
-      tags: "Tag"
-    };
-    //iterate through songs, books, and tags and pull unique values
+    const labels = this.get('fieldLabels');
+    // iterate through songs, books, and tags and pull unique values
     model.forEach(function(item){
       const songs = item.data;
       const books = item.get('book.data');
       const tags = item.get('tags');
       for (const key in songs){
-        if (!(!songs[key])){
+        if (songs[key]){
           pool.add(`${key}::${songs[key]}`);
         }
       }
       for (const key in books){
-        if (!(!books[key])){
+        if (books[key]){
           pool.add(`book.${key}::${books[key]}`)
         }
       }
       tags.forEach(function(tag){
-        if (!(!tag.get('title'))){
+        if (tag.get('title')){
           pool.add(`${tag.get('category')}s::${tag.get('title')}`)
         }
       });
@@ -93,21 +95,13 @@ export default Ember.Controller.extend({
   //sorts model based on the value of the sort parameter
   sortedModel: Ember.computed.sort('filteredModel', 'sortArray'),
 
-  //not currently being used.
   actions: {
     updateParams(obj){
-      console.log(obj);
       for (const key in obj){
         if (!obj.hasOwnProperty(key)) {continue;}
         this.set(key, obj[key]);
         this.notifyPropertyChange(key);
       }
-    },
-    applyFilter(obj){
-      console.log(obj);
-      let output = {filter: {}};
-      output.filter[obj.field] = obj.title;
-      this.send('updateParams', output);
     }
   }
 

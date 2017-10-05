@@ -1,7 +1,4 @@
-{{#ui-search source=searchPool onSelect=(action "applyFilter") }}
-  <input class="prompt" type="text" placeholder="search songs">
-  <div class="results"></div>
-{{/ui-search}}
+{{advanced-search labels=fieldLabels pool=searchPool onChange=(action "updateParams")}}
 
 <table class="ui celled table">
   <thead>

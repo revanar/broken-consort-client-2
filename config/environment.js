@@ -3,6 +3,7 @@
 
 module.exports = function(environment) {
   let ENV = {
+    es6: true,
     modulePrefix: 'broken-consort-client-2',
     environment,
     rootURL: '/',
