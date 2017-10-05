@@ -7,9 +7,9 @@
 
 <div class="ui form">
   <div class="ui dividing header">Filters</div>
-  <div class="fields">
+  <form class="fields" {{action "testAction" on="submit"}}>
     <div class="field">
-      {{#ui-dropdown class="selection"}}
+      {{#ui-dropdown class="selection" selected=selectedField onChange=(action (mut selectedField))}}
         <div class="default text">Field</div>
         <i class="dropdown icon"></i>
         <div class="menu">
@@ -22,16 +22,9 @@
       {{/ui-dropdown}}
     </div>
     <div class="field">
-      {{#ui-dropdown class="search selection" allowAdditions=true minCharacters=2}}
-        <div class="default text">Filter Value</div>
-        <div class="menu">
-          <div class="item">
-            <b>Beep</b> Boop
-          </div>
-        </div>
-      {{/ui-dropdown}}
+      {{input value=filter}}
     </div>
-  </div>
+  </form>
 </div>
 
 <button class="ui button">Add new filter</button>
