@@ -1,7 +1,7 @@
 <div class="title-bar">
   <h1>Broken Consort</h1>
   {{#ui-search source=pool allowAdditions=true onSelect=(action "onSearch") }}
-    <input class="prompt" type="text" placeholder="search songs">
+    <input class="prompt" type="text" placeholder="quick filter">
     <div class="results"></div>
   {{/ui-search}}
 </div>
@@ -15,7 +15,7 @@
           <div class="ui label">
             {{get labels field}}:
             <div class="detail">{{filter}}</div>
-            <i class="delete icon"></i>
+            <i class="delete icon" {{action "deleteFilter" field filter}}></i>
           </div>
         </div>
       {{/each}}

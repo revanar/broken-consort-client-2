@@ -72,24 +72,26 @@ export default Ember.Controller.extend({
     //for each field provided in the filter, returns anything that exactly matches the filter terms
     for (const key in filter){
       if (!filter.hasOwnProperty(key)) {continue;}
-      //regex allows for "includes" testing for partial matching, and also ignores illegal characters
-      const regex = new RegExp(filter[key].replace(/[{}"()]/g, ""), 'i');
-      //modelKey replaces "--" in the filter keys with ".", so that it searches model relationships correctly
-      const modelKey = key.replace("--", ".");
-      //for numeric data, allow range searches with "-" separator
-      if ((key === 'book--year' || key === 'song_no' || key === 'parts_no') && filter[key].indexOf('-') > -1){
-        const [startDate, endDate] = filter[key].split('-');
-        model = model.filter(item => item.get(modelKey) >= startDate && item.get(modelKey) <= endDate);
-        //for tags, filter by tag titles - only filters by one tag at a time
-      } else if (key=== 'languages' || key === 'tags'){
-        const regex = new RegExp(filter[key], 'i');
-        model = model.filter(
-          model => {return (model.get('tags').filter(item => {return regex.test(item.get('title'))}).length > 0)}
-        )
-      }
-      else {
-        model = model.filter(item => {return regex.test(item.get(modelKey))});
-      }
+      if (filter[key] && typeof filter[key] === "string"){filter[key] = [filter[key]]}
+      filter[key].forEach(function(filterItem){
+        //regex allows for "includes" testing for partial matching, and also ignores illegal characters
+        const regex = new RegExp(filterItem.replace(/[{}"()]/g, ""), 'i');
+        //modelKey replaces "--" in the filter keys with ".", so that it searches model relationships correctly
+        const modelKey = key.replace("--", ".");
+        //for numeric data, allow range searches with "-" separator
+        if ((key === 'book--year' || key === 'song_no' || key === 'parts_no') && filterItem.indexOf('-') > -1){
+          const [startDate, endDate] = filterItem.split('-');
+          model = model.filter(item => item.get(modelKey) >= startDate && item.get(modelKey) <= endDate);
+          //for tags, filter by tag titles - only filters by one tag at a time
+        } else if (key=== 'languages' || key === 'tags'){
+          model = model.filter(
+            model => {return (model.get('tags').filter(item => {return regex.test(item.get('title'))}).length > 0)}
+          )
+        }
+        else {
+          model = model.filter(item => {return regex.test(item.get(modelKey))});
+        }
+      });
     }
     return model;
   }),
