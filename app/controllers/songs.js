@@ -73,18 +73,20 @@ export default Ember.Controller.extend({
     //for each field provided in the filter, returns anything that exactly matches the filter terms
     for (const key in filter){
       if (!filter.hasOwnProperty(key)) {continue;}
+      const regex = new RegExp(filter[key].replace(/[{}"()]/g, ""), 'i');
       //for numeric data, allow range searches with "-" separator
       if ((key === 'book.year' || key === 'song_no' || key === 'parts_no') && filter[key].indexOf('-') > -1){
         const [startDate, endDate] = filter[key].split('-');
         model = model.filter(item => item.get(key) >= startDate && item.get(key) <= endDate);
         //for tags, filter by tag titles - only filters by one tag at a time
       } else if (key=== 'languages' || key === 'tags'){
+        const regex = new RegExp(filter[key], 'i');
         model = model.filter(
-          model => {return (model.get('tags').filter(item => {return item.get('title') === filter[key]}).length > 0)}
+          model => {return (model.get('tags').filter(item => {return regex.test(item.get('title'))}).length > 0)}
         )
       }
       else {
-        model = model.filterBy(key, filter[key]);
+        model = model.filter(item => {return regex.test(item.get(key))});
       }
     }
     return model;

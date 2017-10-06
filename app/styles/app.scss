@@ -1,3 +1,7 @@
+body {
+  margin: 10px;
+}
+
 //styles for displaying book editor and year on songs page
 .book {
   &.editor {
@@ -30,4 +34,15 @@
       content: "";
     }
   }
+}
+
+//for hiding things
+.hidden{
+  display: none !important;
+}
+
+.title-bar{
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
 }

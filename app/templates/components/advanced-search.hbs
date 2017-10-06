@@ -1,13 +1,36 @@
-<h1>Broken Consort</h1>
+<div class="title-bar">
+  <h1>Broken Consort</h1>
+  {{#ui-search source=pool allowAdditions=true onSelect=(action "onSearch") }}
+    <input class="prompt" type="text" placeholder="search songs">
+    <div class="results"></div>
+  {{/ui-search}}
+</div>
 
-{{#ui-search source=pool allowAdditions=true onSelect=(action "applyFilter") }}
-  <input class="prompt" type="text" placeholder="search songs">
-  <div class="results"></div>
-{{/ui-search}}
 
 <div class="ui form">
-  <div class="ui dividing header">Filters</div>
-  <form class="fields" {{action "testAction" on="submit"}}>
+  {{#each-in param as |field filters|}}
+    {{#if (is-array filters)}}
+      {{#each filters as |filter|}}
+        <div class="field">
+          <div class="ui label">
+            {{get labels field}}:
+            <div class="detail">{{filter}}</div>
+            <i class="delete icon"></i>
+          </div>
+        </div>
+      {{/each}}
+    {{else}}
+      <div class="field">
+        <div class="ui label">
+          {{get labels field}}:
+          <div class="detail">{{filters}}</div>
+          <i class="delete icon"></i>
+        </div>
+      </div>
+    {{/if}}
+  {{/each-in}}
+  <div class="ui dividing header">Add new filter</div>
+  <form class="fields" {{action "addFilter" on="submit"}}>
     <div class="field">
       {{#ui-dropdown class="selection" selected=selectedField onChange=(action (mut selectedField))}}
         <div class="default text">Field</div>
@@ -26,5 +49,3 @@
     </div>
   </form>
 </div>
-
-<button class="ui button">Add new filter</button>
