@@ -7,13 +7,14 @@ export default Ember.Controller.extend({
   filter: [],
 
   fieldLabels: {
+    //uses "--" instead of "." to allow it to work correctly with the get helper, to dynamically generate labels in the template
     title: "Song Title",
     parts_no: "Number of Parts",
     voices: "Voices",
     composer: "Composer",
-    "book.title": "Book Title",
-    "book.editor": "Book Editor",
-    "book.year": "Book Publication Year",
+    "book--title": "Book Title",
+    "book--editor": "Book Editor",
+    "book--year": "Book Publication Year",
     languages: "Language",
     tags: "Tag"
   },
@@ -35,7 +36,7 @@ export default Ember.Controller.extend({
       }
       for (const key in books){
         if (books[key]){
-          pool.add(`book.${key}::${books[key]}`)
+          pool.add(`book--${key}::${books[key]}`)
         }
       }
       tags.forEach(function(tag){
@@ -47,10 +48,8 @@ export default Ember.Controller.extend({
     //convert set into object
     let output = [];
     pool.forEach(function(item){
-      const itemArray = item.split("::");
-      const title = itemArray[1];
-      const description = itemArray[0];
-      output.push({title:title, description:labels[description], field:description});
+      const [field, title] = item.split("::");
+      output.push({title:title, description:labels[field], field:field});
     });
     //sort output array by title
     function compare(a,b){
@@ -73,11 +72,14 @@ export default Ember.Controller.extend({
     //for each field provided in the filter, returns anything that exactly matches the filter terms
     for (const key in filter){
       if (!filter.hasOwnProperty(key)) {continue;}
+      //regex allows for "includes" testing for partial matching, and also ignores illegal characters
       const regex = new RegExp(filter[key].replace(/[{}"()]/g, ""), 'i');
+      //modelKey replaces "--" in the filter keys with ".", so that it searches model relationships correctly
+      const modelKey = key.replace("--", ".");
       //for numeric data, allow range searches with "-" separator
-      if ((key === 'book.year' || key === 'song_no' || key === 'parts_no') && filter[key].indexOf('-') > -1){
+      if ((key === 'book--year' || key === 'song_no' || key === 'parts_no') && filter[key].indexOf('-') > -1){
         const [startDate, endDate] = filter[key].split('-');
-        model = model.filter(item => item.get(key) >= startDate && item.get(key) <= endDate);
+        model = model.filter(item => item.get(modelKey) >= startDate && item.get(modelKey) <= endDate);
         //for tags, filter by tag titles - only filters by one tag at a time
       } else if (key=== 'languages' || key === 'tags'){
         const regex = new RegExp(filter[key], 'i');
@@ -86,7 +88,7 @@ export default Ember.Controller.extend({
         )
       }
       else {
-        model = model.filter(item => {return regex.test(item.get(key))});
+        model = model.filter(item => {return regex.test(item.get(modelKey))});
       }
     }
     return model;
