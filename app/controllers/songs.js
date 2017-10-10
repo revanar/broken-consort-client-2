@@ -9,12 +9,12 @@ export default Ember.Controller.extend({
   fieldLabels: {
     //uses "--" instead of "." to allow it to work correctly with the get helper, to dynamically generate labels in the template
     title: "Song Title",
-    parts_no: "Number of Parts",
+    parts_no: "No. Parts",
     voices: "Voices",
     composer: "Composer",
     "book--title": "Book Title",
     "book--editor": "Book Editor",
-    "book--year": "Book Publication Year",
+    "book--year": "Book Year",
     languages: "Language",
     tags: "Tag"
   },

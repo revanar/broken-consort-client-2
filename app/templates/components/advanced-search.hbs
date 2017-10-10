@@ -1,51 +1,58 @@
-<div class="title-bar">
-  <h1>Broken Consort</h1>
-  {{#ui-search source=pool allowAdditions=true onSelect=(action "onSearch") }}
-    <input class="prompt" type="text" placeholder="quick filter">
-    <div class="results"></div>
-  {{/ui-search}}
-</div>
 
-
-<div class="ui form">
-  {{#each-in param as |field filters|}}
-    {{#if (is-array filters)}}
-      {{#each filters as |filter|}}
-        <div class="field">
-          <div class="ui label">
+<h1>Broken Consort</h1>
+{{#unless paramIsEmpty}}
+  <div class="ui basic segment">
+    {{#each-in param as |field filters|}}
+      {{#if (is-array filters)}}
+        {{#each filters as |filter|}}
+          <div class="ui large label">
             {{get labels field}}:
             <div class="detail">{{filter}}</div>
             <i class="delete icon" {{action "deleteFilter" field filter}}></i>
           </div>
-        </div>
-      {{/each}}
-    {{else}}
-      <div class="field">
-        <div class="ui label">
+        {{/each}}
+      {{else}}
+        <div class="ui large label">
           {{get labels field}}:
           <div class="detail">{{filters}}</div>
           <i class="delete icon"></i>
         </div>
+      {{/if}}
+    {{/each-in}}
+    <button class="ui large basic red label" {{action "clearFilters"}}>Clear All</button>
+  </div>
+{{/unless}}
+
+<div class="ui segment">
+  <div class="ui top attached label">Add filters</div>
+  <div class="content">
+    <div class="ui form">
+      <div class="field">
+        {{#ui-search class="fluid" source=pool allowAdditions=true onSelect=(action "onSearch") }}
+          <input class="prompt" type="text" placeholder="quick filter" value={{beep}}>
+          <div class="results"></div>
+        {{/ui-search}}
       </div>
-    {{/if}}
-  {{/each-in}}
-  <div class="ui dividing header">Add new filter</div>
-  <form class="fields" {{action "addFilter" on="submit"}}>
-    <div class="field">
-      {{#ui-dropdown class="selection" selected=selectedField onChange=(action (mut selectedField))}}
-        <div class="default text">Field</div>
-        <i class="dropdown icon"></i>
-        <div class="menu">
-          {{#each-in labels as |field label|}}
-            <div class="item" data-value="{{field}}">
-              {{label}}
+      <form class="fields" {{action "addFilter" on="submit"}}>
+        <div class="four wide field">
+          <label>Column</label>
+          {{#ui-dropdown class="selection" selected=selectedField onChange=(action (mut selectedField))}}
+            <div class="default text">Field</div>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              {{#each-in labels as |field label|}}
+                <div class="item" data-value="{{field}}">
+                  {{label}}
+                </div>
+              {{/each-in}}
             </div>
-          {{/each-in}}
+          {{/ui-dropdown}}
         </div>
-      {{/ui-dropdown}}
+        <div class="twelve wide field">
+          <label>Contains</label>
+          {{input value=filter}}
+        </div>
+      </form>
     </div>
-    <div class="field">
-      {{input value=filter}}
-    </div>
-  </form>
+  </div>
 </div>

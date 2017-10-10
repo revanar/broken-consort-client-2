@@ -2,24 +2,6 @@ body {
   margin: 10px;
 }
 
-//styles for displaying book editor and year on songs page
-.book {
-  &.editor {
-    font-style: italic;
-    &:before {
-      content: "/ edited by ";
-    }
-  }
-  &.year {
-    &:before {
-      content: "[";
-    }
-    &:after {
-      content: "]";
-    }
-  }
-}
-
 //styles for displaying csv list
 .csv {
   padding: 0;
@@ -39,10 +21,4 @@ body {
 //for hiding things
 .hidden{
   display: none !important;
-}
-
-.title-bar{
-  display:flex;
-  justify-content: space-between;
-  align-items: center;
 }

@@ -4,10 +4,12 @@
   <thead>
   <tr>
     <th>{{#sort-link sort "title"}}Title{{/sort-link}}</th>
-    <th>{{#sort-link sort "parts_no"}}# Parts{{/sort-link}}</th>
+    <th>{{#sort-link sort "parts_no"}}No. Parts{{/sort-link}}</th>
     <th>{{#sort-link sort "voices"}}Voices{{/sort-link}}</th>
     <th>{{#sort-link sort "composer"}}Composer{{/sort-link}}</th>
-    <th>{{#sort-link sort "book.title"}}Book{{/sort-link}}</th>
+    <th>{{#sort-link sort "book.title"}}Book Title{{/sort-link}}</th>
+    <th>{{#sort-link sort "book.editor"}}Book Editor{{/sort-link}}</th>
+    <th>{{#sort-link sort "book.year"}}Book Year{{/sort-link}}</th>
     <th>Tags</th>
     <th>Languages</th>
   </tr>
@@ -18,14 +20,9 @@
       <td>{{song.parts_no}}</td>
       <td>{{song.voices}}</td>
       <td>{{song.composer}}</td>
-      <td>{{song.book.title}}
-        {{#if song.book.editor}}
-          <span class="book editor">{{song.book.editor}}</span>
-        {{/if}}
-        {{#if song.book.year}}
-          <span class="book year">{{song.book.year}}</span>
-        {{/if}}
-      </td>
+      <td>{{song.book.title}}</td>
+      <td>{{song.book.editor}}</td>
+      <td>{{song.book.year}}</td>
       <td>
         <ul class="csv">
         {{#each song.tags as |tag|}}
