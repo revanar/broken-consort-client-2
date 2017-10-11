@@ -3,7 +3,7 @@ import Ember from 'ember';
 export default Ember.Component.extend({
   selectedField: 'title',
   paramIsEmpty: Ember.computed('param', function(){
-    return Object.getOwnPropertyNames(this.get('param')).length === 0;
+    return Object.getOwnPropertyNames(this.get('param')).length === 0 || this.get('param').length === 0;
   }),
   actions: {
     onSearch(obj){
